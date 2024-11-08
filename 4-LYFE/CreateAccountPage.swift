@@ -1,6 +1,8 @@
 import SwiftUI
 
-
+enum CreateAccountDestination: Hashable {
+    case login
+}
 
 struct CreateAccountPage: View {
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
@@ -13,15 +15,15 @@ struct CreateAccountPage: View {
     @State private var confirmPassword: String = ""
     @State private var showSuccessAlert = false
     
+    @State private var navigationPath: [CreateAccountDestination] = []
+
     var body: some View {
-        NavigationView{
-            ZStack{
+        NavigationStack(path: $navigationPath) {
+            ZStack {
                 backgroundColor
                     .ignoresSafeArea()
                 
-                
-                
-                VStack(spacing: 15){
+                VStack(spacing: 15) {
                     Text("Create My Account")
                         .font(.title)
                         .padding()
@@ -52,52 +54,60 @@ struct CreateAccountPage: View {
                         .padding(.horizontal)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
-                    Button("Submit")  {
+                    Button("Submit") {
                         createAccount()
                     }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 50)
-                        .background(Color.blue)
-                        .foregroundStyle(Color.white)
-                        .font(.system(size: 25))
-                        .cornerRadius(15)
-                        .alert(isPresented: $showSuccessAlert) {
-                                                Alert(title: Text("Account Created"), message: Text("Your account has been created!"), dismissButton: .default(Text("OK")))
-                                            }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 50)
+                    .background(Color.blue)
+                    .foregroundStyle(Color.white)
+                    .font(.system(size: 25))
+                    .cornerRadius(15)
                     .padding(20)
                 }
             }
             .navigationTitle("Create Account")
+            .navigationDestination(for: CreateAccountDestination.self) { destination in
+                switch destination {
+                case .login:
+                    LoginPage()
+                }
+            }
         }
     }
     
     func createAccount() {
+        
         guard let url = URL(string: "http://127.0.0.1:8086/user") else {
             print("Invalid URL")
             return
         }
-            
-            let accountData: [String: String] = [
-                "firstName": firstName,
-                "lastName": lastName,
-                "email": email,
-                "password": password,
-                "role": role,
-            ]
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try? JSONEncoder().encode(accountData)
-            
-            URLSession.shared.dataTask(with: request) { _, response, _ in
-                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                    DispatchQueue.main.async {
-                        showSuccessAlert = true
-                    }
+        
+        let accountData: [String: String] = [
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "password": password,
+            "role": role
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONEncoder().encode(accountData)
+        
+        URLSession.shared.dataTask(with: request) { _, response, _ in
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                DispatchQueue.main.async {
+                    navigationPath.append(.login)
                 }
-            }.resume()
+            } else {
+                DispatchQueue.main.async {
+                    showSuccessAlert = true                 }
+            }
         }
+        .resume()
+    }
 }
 
 #Preview {

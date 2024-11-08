@@ -1,21 +1,26 @@
 import SwiftUI
 
+enum Destination: Hashable {
+    case workouts
+}
+
 struct LoginPage: View {
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
     
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showSuccessAlert = false
-
+    @State private var isLoggedIn = false
     
+    @State private var navigationPath: [Destination] = []
     
     var body: some View {
-        NavigationView{
-            ZStack{
+        NavigationStack(path: $navigationPath) {
+            ZStack {
                 backgroundColor
                     .ignoresSafeArea()
                 
-                VStack(spacing:15){
+                VStack(spacing: 15) {
                     
                     TextField("Email", text: $email)
                         .padding(.horizontal)
@@ -26,25 +31,29 @@ struct LoginPage: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
                     Button("Login") {
-                        Login()
+                        login()
                     }
-
-                    
+                }
+                .navigationTitle("Login Page")
+                .alert(isPresented: $showSuccessAlert) {
+                    Alert(
+                        title: Text("Login Successful"),
+                        message: Text("You have successfully logged in!"),
+                        dismissButton: .default(Text("OK"))
+                    )
                 }
             }
-            .navigationTitle("Login Page")
-            .alert(isPresented: $showSuccessAlert) {
-                Alert(
-                    title: Text("Login Successful"),
-                    message: Text("You have successfully logged in!"),
-                    dismissButton: .default(Text("OK"))
-                )
+            .navigationDestination(for: Destination.self) { destination in
+                switch destination {
+                case .workouts:
+                    WorkoutsPage()
+                }
             }
         }
     }
     
-    func Login() {
-        guard let url = URL(string: "http://127.0.0.1:8086/user/auth") else{
+    func login() {
+        guard let url = URL(string: "http://127.0.0.1:8086/user/auth") else {
             print("invalid login")
             return
         }
@@ -53,7 +62,7 @@ struct LoginPage: View {
             "email": email,
             "password": password,
         ]
-            
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -63,15 +72,14 @@ struct LoginPage: View {
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  {
                 DispatchQueue.main.async {
                     showSuccessAlert = true
+                    navigationPath.append(.workouts)
                 }
             }
-        }.resume()
-
-
+        }
+        .resume()
     }
 }
 
-
-#Preview{
+#Preview {
     LoginPage()
 }

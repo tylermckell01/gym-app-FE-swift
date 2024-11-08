@@ -9,32 +9,33 @@ struct LandingPage: View {
             ZStack{
                 backgroundColor
                     .ignoresSafeArea()
-
-            VStack {
-                Text("4-LYFE")
-                    .font(.system(size: 45))
-                    .padding()
                 
-                
-                NavigationLink(destination: CreateAccountPage()) {
-                    Text("Create Account")
+                VStack {
+                    Text("4-LYFE")
+                        .font(.system(size: 45))
                         .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(20)
-                }
-                
-                VStack{
-                    Text("Already have an account?")
                     
-                    NavigationLink(destination: LoginPage()) {
-                        Text("Login Here")
-                        
+                    NavigationLink(destination: CreateAccountPage()) {
+                        Text("Create Account")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
                     }
                     
+                    VStack{
+                        Text("Already have an account?")
+                            .padding(.top, 250)
+                        
+                        NavigationLink(destination: LoginPage()) {
+                            Text("Login")
+                            
+                        }
+                    }
+                    //                .padding(10)
                 }
-                .padding(10)
-            }}
+                .padding(.top, 200)
+            }
             .navigationTitle("Landing Page")
         }
     }
