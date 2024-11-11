@@ -1,4 +1,5 @@
 import SwiftUI
+import KeychainSwift
 
 enum Destination: Hashable {
     case workouts
@@ -32,6 +33,7 @@ struct LoginPage: View {
                     
                     Button("Login") {
                         login()
+//                        navigationPath.append(.workouts)
                     }
                 }
                 .navigationTitle("Login Page")
@@ -53,10 +55,11 @@ struct LoginPage: View {
     }
     
     func login() {
-        guard let url = URL(string: "http://127.0.0.1:8086/user/auth") else {
-            print("invalid login")
-            return
-        }
+        guard let url = URL(string: "http://127.0.0.1:8086/user/auth")
+            else {
+                print("invalid login")
+                return
+            }
         
         let loginInfo: [String: String] = [
             "email": email,
@@ -68,16 +71,32 @@ struct LoginPage: View {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try? JSONEncoder().encode(loginInfo)
         
-        URLSession.shared.dataTask(with: request) { _, response, _ in
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  {
-                DispatchQueue.main.async {
-                    showSuccessAlert = true
-                    navigationPath.append(.workouts)
+        
+        
+        URLSession.shared.dataTask(with: request) { data, response, _ in
+                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                           let authInfo = json["auth_info"] as? [String: Any],
+                           let token = authInfo["auth_token"] as? String {
+                        
+                            print("Token received: \(token)")
+                            let keychain = KeychainSwift()
+                            keychain.set(token, forKey: "authToken")
+                            
+                            DispatchQueue.main.async {
+                                showSuccessAlert = true
+                                print("Navigating to workouts...")
+                                navigationPath.append(.workouts)
+                            }
+                        }
+                    } catch {
+                        print("Error parsing JSON: \(error)")
+                    }
                 }
             }
+            .resume()
         }
-        .resume()
-    }
 }
 
 #Preview {

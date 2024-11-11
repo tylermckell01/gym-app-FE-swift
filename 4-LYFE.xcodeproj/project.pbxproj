@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3B9797662CE2A36A00ECBA94 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3B9797652CE2A36A00ECBA94 /* KeychainSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		3BE517D22CD56C8B00437A75 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B9797662CE2A36A00ECBA94 /* KeychainSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = "4-LYFE";
 			packageProductDependencies = (
+				3B9797652CE2A36A00ECBA94 /* KeychainSwift */,
 			);
 			productName = "4-LYFE";
 			productReference = 3BE517C12CD56C8900437A75 /* 4-LYFE.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 3BE517B82CD56C8900437A75;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3B9797642CE2A31D00ECBA94 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3BE517C22CD56C8900437A75 /* Products */;
 			projectDirPath = "";
@@ -552,6 +561,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3B9797642CE2A31D00ECBA94 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3B9797652CE2A36A00ECBA94 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3B9797642CE2A31D00ECBA94 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3BE517B92CD56C8900437A75 /* Project object */;
 }
