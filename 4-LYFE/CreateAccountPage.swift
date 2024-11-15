@@ -106,11 +106,11 @@ struct CreateAccountPage: View {
         }
         
         let accountData: [String: String] = [
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email,
+            "firstName": firstName.lowercased(),
+            "lastName": lastName.lowercased(),
+            "email": email.lowercased(),
             "password": password,
-            "role": role
+            "role": role.lowercased()
         ]
         
         var request = URLRequest(url: url)
