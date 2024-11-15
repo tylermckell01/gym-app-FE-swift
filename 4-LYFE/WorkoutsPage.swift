@@ -37,23 +37,48 @@ struct WorkoutsPage: View {
     @State private var workouts: [Workout] = []
     
     var body: some View {
-        NavigationView{
-            ZStack{
+        NavigationView {
+            ZStack {
                 backgroundColor
                     .ignoresSafeArea()
                 
-                VStack(spacing:15){
-                    backgroundColor
-                    
-                    List(workouts, id: \.workout_id)
-                    {
-                        workout in
-                        Text(workout.workout_name)
-                        Text(workout.description ?? "no description")
-//                        Text(workout.exercises)
-                        backgroundColor
+                ScrollView {
+//                    HStack(spacing: 15) {
+                    LazyVGrid(columns: layout) {
+                        ForEach(workouts, id: \.workout_id) { workout in
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(workout.workout_name)
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                
+                                Text(workout.description ?? "No description")
+                                    .font(.subheadline)
+                                    .foregroundColor(.white)
+                                
+                                Text("\(workout.length, specifier: "%.1f") mins.")
+                                    .font(.subheadline)
+                                    .foregroundColor(.white)
+                                
+                            }
+//                            .padding(15)
+                            .frame(width: 125)
+                            .frame(height: 100)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.white.opacity(0.1))
+                                    .padding(.vertical, 10)
+
+                            )
+                            
+                        }
+                        
                     }
                 }
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.blue.opacity(0.15))
+                    .padding(.vertical, 0)
+
+                    .padding(.horizontal, 20)
             }
             .navigationTitle("My Workouts Page")
             .onAppear{
@@ -61,6 +86,12 @@ struct WorkoutsPage: View {
             }
         }
     }
+    
+    let layout = [
+        GridItem(.fixed(200)),
+        GridItem(.fixed(200)),
+    ]
+
     
     func fetchAllWorkoutData() {
         guard let url = URL(string: "http://127.0.0.1:8086/workouts") else {
