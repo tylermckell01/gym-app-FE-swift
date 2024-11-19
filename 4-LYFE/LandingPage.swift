@@ -16,7 +16,7 @@ struct LandingPage: View {
                     .foregroundColor(.white)
 
                 Button("Create Account") {
-                    navigationPath.append(.createaccount)
+                    navigationPath.append(.createAccount)
                 }
                 .padding()
                 .background(Color.blue)

@@ -8,7 +8,7 @@ struct MainView: View {
             LandingPage(navigationPath: $navigationPath)
                 .navigationDestination(for: AppDestination.self) { destination in
                     switch destination {
-                    case .createaccount:
+                    case .createAccount:
                         CreateAccountPage(navigationPath: $navigationPath)
                     case .login:
                         LoginPage(navigationPath: $navigationPath)

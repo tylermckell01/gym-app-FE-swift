@@ -54,7 +54,12 @@ struct WorkoutsPage: View {
                     .multilineTextAlignment(.center)
                     .padding()
             } else {
+                
+                
                 ScrollView {
+                    Text("Workouts page")
+                        .font(.largeTitle)
+                    
                     LazyVGrid(columns: layout, spacing: 20) {
                         ForEach(workouts, id: \.workout_id) { workout in
                             VStack(alignment: .leading, spacing: 8) {
@@ -67,7 +72,7 @@ struct WorkoutsPage: View {
                                     .foregroundColor(.white)
                                     .lineLimit(2)
                                 
-                                Text("\(workout.length, specifier: "%.1f") mins")
+                                Text("\(workout.length, specifier: "%.0f") mins")
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                             }

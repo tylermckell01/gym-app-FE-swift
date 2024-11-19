@@ -1,7 +1,7 @@
 import Foundation
 
 enum AppDestination: Hashable {
-    case createaccount
+    case createAccount
     case login
     case homePage
     case workouts
