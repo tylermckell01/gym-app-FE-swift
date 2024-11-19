@@ -87,7 +87,6 @@ struct CreateAccountPage: View {
     func submitButtonTapped() {
         Task {
             isSubmitting = true
-            print("Submit button tapped. Starting account creation...")
             await createAccount()
             isSubmitting = false
         }
@@ -106,8 +105,6 @@ struct CreateAccountPage: View {
             "password": password,
             "role": role.lowercased()
         ]
-        
-        print("Account data: \(accountData)")
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

@@ -1,18 +1,6 @@
 import SwiftUI
 import KeychainSwift
 
-//struct LoginPage: View {
-//    @Binding var navigationPath: [AppDestination]
-//
-//    var body: some View {
-//        Text("Login Page")
-//            .font(.largeTitle)
-//            .onAppear {
-//                print("LoginPage loaded")
-//            }
-//    }
-//}
-
 
 struct LoginPage: View {
     @Binding var navigationPath: [AppDestination] 
@@ -110,8 +98,7 @@ struct LoginPage: View {
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let authInfo = json["auth_info"] as? [String: Any],
                        let token = authInfo["auth_token"] as? String {
-
-                        print("Token received: \(token)")
+                        
                         let keychain = KeychainSwift()
                         keychain.set(token, forKey: "authToken")
 

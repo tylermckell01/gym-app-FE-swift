@@ -133,8 +133,6 @@ struct WorkoutsPage: View {
                 return
             }
             
-            print("Raw JSON data:", String(data: data, encoding: .utf8) ?? "Invalid data format")
-            
             do {
                 let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
                 DispatchQueue.main.async {
