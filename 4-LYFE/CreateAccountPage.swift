@@ -1,22 +1,9 @@
 import SwiftUI
 import Foundation
 
-//struct CreateAccountPage: View {
-//    @Binding var navigationPath: [AppDestination]
-//
-//    var body: some View {
-//        Text("Create Account Page")
-//            .font(.largeTitle)
-//            .onAppear {
-//                print("CreateAccountPage loaded")
-//            }
-//    }
-//}
-
-
 struct CreateAccountPage: View {
-    @Binding var navigationPath: [AppDestination] // Use the shared navigation path
-
+    @Binding var navigationPath: [AppDestination]
+    
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
     
     @State private var firstName: String = ""
@@ -81,10 +68,10 @@ struct CreateAccountPage: View {
                 .cornerRadius(15)
                 .padding(20)
                 
-                Button("Go to Login") {
-                    navigationPath.append(.login)
-                    print("navigation path \(navigationPath)")
-                }
+//                Button("Go to Login") {
+//                    navigationPath.append(.login)
+//                    print("navigation path \(navigationPath)")
+//                }
             }
         }
         .navigationTitle("Create Account")
@@ -113,12 +100,14 @@ struct CreateAccountPage: View {
         }
         
         let accountData: [String: String] = [
-            "firstName": firstName.lowercased(),
-            "lastName": lastName.lowercased(),
+            "first_name": firstName.lowercased(),
+            "last_name": lastName.lowercased(),
             "email": email.lowercased(),
             "password": password,
             "role": role.lowercased()
         ]
+        
+        print("Account data: \(accountData)")
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

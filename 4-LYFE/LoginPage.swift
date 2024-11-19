@@ -86,7 +86,7 @@ struct LoginPage: View {
         isSubmitting = true
 
         let loginInfo: [String: String] = [
-            "email": email,
+            "email": email.lowercased(),
             "password": password,
         ]
 

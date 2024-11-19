@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var navigationPath: [AppDestination] = [] // Shared navigation path
+    @State private var navigationPath: [AppDestination] = [] 
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -23,3 +23,4 @@ struct MainView: View {
 #Preview{
     MainView()
 }
+
