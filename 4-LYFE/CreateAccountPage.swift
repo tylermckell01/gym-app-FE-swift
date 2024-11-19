@@ -1,10 +1,22 @@
 import SwiftUI
+import Foundation
 
-enum CreateAccountDestination: Hashable {
-    case login
-}
+//struct CreateAccountPage: View {
+//    @Binding var navigationPath: [AppDestination]
+//
+//    var body: some View {
+//        Text("Create Account Page")
+//            .font(.largeTitle)
+//            .onAppear {
+//                print("CreateAccountPage loaded")
+//            }
+//    }
+//}
+
 
 struct CreateAccountPage: View {
+    @Binding var navigationPath: [AppDestination] // Use the shared navigation path
+
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
     
     @State private var firstName: String = ""
@@ -12,81 +24,76 @@ struct CreateAccountPage: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var role: String = ""
-    @State private var confirmPassword: String = ""
+//    @State private var confirmPassword: String = ""
     
     @State private var showSuccessAlert = false
     @State private var isSubmitting = false
-    
-    @State private var navigationPath: [CreateAccountDestination] = []
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            ZStack {
-                backgroundColor
-                    .ignoresSafeArea()
+        ZStack {
+            backgroundColor
+                .ignoresSafeArea()
+            
+            VStack(spacing: 15) {
+                Text("Create My Account")
+                    .font(.title)
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
                 
-                VStack(spacing: 15) {
-                    Text("Create My Account")
-                        .font(.title)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                    
-                    TextField("First Name", text: $firstName)
-                        .padding(.horizontal)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("First Name", text: $firstName)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    TextField("Last Name", text: $lastName)
-                        .padding(.horizontal)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Last Name", text: $lastName)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    TextField("Email", text: $email)
-                        .padding(.horizontal)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Email", text: $email)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    SecureField("Password", text: $password)
-                        .padding(.horizontal)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                SecureField("Password", text: $password)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    SecureField("Confirm Password", text: $confirmPassword)
-                        .padding(.horizontal)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    TextField("Role", text: $role)
-                        .padding(.horizontal)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    Button(action: submitButtonTapped) {
-                        if isSubmitting {
-                            ProgressView()
-                        } else {
-                            Text("Submit")
-                        }
+//                SecureField("Confirm Password", text: $confirmPassword)
+//                    .padding(.horizontal)
+//                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                TextField("Role", text: $role)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                Button(action: submitButtonTapped) {
+                    if isSubmitting {
+                        ProgressView()
+                    } else {
+                        Text("Submit")
                     }
-                    .disabled(isSubmitting)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 50)
-                    .background(isSubmitting ? Color.gray : Color.blue)
-                    .foregroundColor(.white)
-                    .font(.system(size: 25))
-                    .cornerRadius(15)
-                    .padding(20)
+                }
+                .disabled(isSubmitting)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 50)
+                .background(isSubmitting ? Color.gray : Color.blue)
+                .foregroundColor(.white)
+                .font(.system(size: 25))
+                .cornerRadius(15)
+                .padding(20)
+                
+                Button("Go to Login") {
+                    navigationPath.append(.login)
+                    print("navigation path \(navigationPath)")
                 }
             }
-            .navigationTitle("Create Account")
-            .navigationDestination(for: CreateAccountDestination.self) { destination in
-                switch destination {
-                case .login:
-                    LoginPage()
-                }
-            }
-            .alert(isPresented: $showSuccessAlert) {
-                Alert(
-                    title: Text("Account Created"),
-                    message: Text("Your account has been created!"),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+        }
+        .navigationTitle("Create Account")
+        .alert(isPresented: $showSuccessAlert) {
+            Alert(
+                title: Text("Account Created"),
+                message: Text("Your account has been created!"),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
     
@@ -124,12 +131,11 @@ struct CreateAccountPage: View {
                 print("Account creation succeeded with status \(httpResponse.statusCode).")
                 
                 await MainActor.run {
-                    
                     resetForm()
                     navigationPath.append(.login)
+                    print("navigation path \(navigationPath)")
                 }
             } else {
-//                print("Account creation failed with status \(httpResponse.statusCode).")
                 await MainActor.run {
                     showSuccessAlert = true
                 }
@@ -148,10 +154,13 @@ struct CreateAccountPage: View {
         email = ""
         password = ""
         role = ""
-        confirmPassword = ""
+//        confirmPassword = ""
     }
 }
 
-#Preview{
-     CreateAccountPage()
+
+#Preview {
+    @Previewable @State  var mockNavigationPath: [AppDestination] = []
+
+    return CreateAccountPage(navigationPath: $mockNavigationPath)
 }

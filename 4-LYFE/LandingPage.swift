@@ -1,45 +1,47 @@
 import SwiftUI
 
 struct LandingPage: View {
+    @Binding var navigationPath: [AppDestination] // Shared navigation path
+
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
 
-    
     var body: some View {
-        NavigationView{
-            ZStack{
-                backgroundColor
-                    .ignoresSafeArea()
-                
-                VStack {
-                    Text("4-LYFE")
-                        .font(.system(size: 45))
-                        .padding()
-                    
-                    NavigationLink(destination: CreateAccountPage()) {
-                        Text("Create Account")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(20)
-                    }
-                    
-                    VStack{
-                        Text("Already have an account?")
-                            .padding(.top, 250)
-                        
-                        NavigationLink(destination: LoginPage()) {
-                            Text("Login")
-                            
-                        }
-                    }
-                    //                .padding(10)
+        ZStack {
+            backgroundColor
+                .ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                Text("Welcome to 4-LYFE")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+
+                Button("Create Account") {
+                    navigationPath.append(.createaccount)
+                    print("navigation path \(navigationPath)")
                 }
-                .padding(.top, 200)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+
+                Button("Login") {
+                    navigationPath.append(.login)
+                    print("navigation path \(navigationPath)")
+
+                }
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(10)
             }
-            .navigationTitle("Landing Page")
         }
+        .navigationTitle("Landing Page")
     }
 }
+
 #Preview {
-    LandingPage()
+    @Previewable @State var mockNavigationPath: [AppDestination] = []
+
+    return LandingPage(navigationPath: $mockNavigationPath)
 }
+

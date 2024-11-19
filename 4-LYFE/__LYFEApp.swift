@@ -4,8 +4,7 @@ import SwiftUI
 struct __LYFEApp: App {
     var body: some Scene {
         WindowGroup {
-            LandingPage()
-                
+            MainView()
         }
     }
 }
