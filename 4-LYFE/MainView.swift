@@ -12,6 +12,8 @@ struct MainView: View {
                         CreateAccountPage(navigationPath: $navigationPath)
                     case .login:
                         LoginPage(navigationPath: $navigationPath)
+                    case .homePage:
+                        HomePage(navigationPath: $navigationPath)
                     case .workouts:
                         WorkoutsPage()
                 }

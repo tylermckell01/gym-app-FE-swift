@@ -68,10 +68,10 @@ struct CreateAccountPage: View {
                 .cornerRadius(15)
                 .padding(20)
                 
-//                Button("Go to Login") {
-//                    navigationPath.append(.login)
-//                    print("navigation path \(navigationPath)")
-//                }
+                Button("Go to Login") {
+                    navigationPath.append(.login)
+                    print("navigation path \(navigationPath)")
+                }
             }
         }
         .navigationTitle("Create Account")

@@ -15,7 +15,7 @@ import KeychainSwift
 
 
 struct LoginPage: View {
-    @Binding var navigationPath: [AppDestination] // Use the shared navigation path
+    @Binding var navigationPath: [AppDestination] 
 
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
 
@@ -54,6 +54,11 @@ struct LoginPage: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
+                }
+                
+                Button("go to homepage") {
+                    navigationPath.append(.homePage)
+                    print("navigation path \(navigationPath)")
                 }
                 .disabled(isSubmitting)
                 .padding(.horizontal)
@@ -112,7 +117,7 @@ struct LoginPage: View {
 
                         DispatchQueue.main.async {
                             showSuccessAlert = true
-                            navigationPath = [.workouts] // Navigate to WorkoutsPage
+                            navigationPath = [.homePage]
                             print("navigation path \(navigationPath)")
                         }
                     }

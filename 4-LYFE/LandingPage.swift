@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LandingPage: View {
-    @Binding var navigationPath: [AppDestination] // Shared navigation path
+    @Binding var navigationPath: [AppDestination]
 
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
 
@@ -17,7 +17,6 @@ struct LandingPage: View {
 
                 Button("Create Account") {
                     navigationPath.append(.createaccount)
-                    print("navigation path \(navigationPath)")
                 }
                 .padding()
                 .background(Color.blue)
@@ -26,8 +25,6 @@ struct LandingPage: View {
 
                 Button("Login") {
                     navigationPath.append(.login)
-                    print("navigation path \(navigationPath)")
-
                 }
                 .padding()
                 .background(Color.green)
