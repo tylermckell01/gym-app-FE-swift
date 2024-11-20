@@ -27,15 +27,61 @@ struct HomePage: View {
             backgroundColor
                 .ignoresSafeArea()
             
-            VStack() {
+            VStack(spacing: 20) {
+                
                 Text("Home Page")
                     .font(.largeTitle)
                     .padding()
                 
                 Text("Hello 'User'")
                 
-            
+                Spacer()
+                
+                HStack() {
+                    Button("Profile"){
+//                        navigationPath.append(.workouts)
+                    }
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 20)
+                    Spacer()
+                    
+                    Button("History"){
+//                        navigationPath.append(.workouts)
+                    }
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 20)
+                    Spacer()
+
+                    
+                    Button("Workouts") {
+                        navigationPath.append(.workouts)
+                    }
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 20)
+                    Spacer()
+
+                    
+                    Button("Exercise"){
+//                        navigationPath.append(.workouts)
+                    }
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 20)
+                    Spacer()
+
+                    
+                    Button("Measure"){
+//                        navigationPath.append(.workouts)
+                    }
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 20)
+                    
+                    
+                    
+                }
+                .background(Color.black)
+                .frame(maxWidth: .infinity)
             }
+//            .frame(maxWidth: .infinity)
         }
         .navigationTitle("Home Page")
     }
