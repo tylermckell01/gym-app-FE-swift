@@ -4,9 +4,11 @@ import Foundation
 
 
 struct WorkoutsPage: View {
+    @Binding var navigationPath: [AppDestination]
+    
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
     
-    @State private var workouts: [Workout] = [] // Correct reference
+    @State private var workouts: [Workout] = []
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
     
@@ -82,12 +84,17 @@ struct WorkoutsPage: View {
                                     .fill(Color.white.opacity(0.1))
                             )
                         }
+                        
                     }
                     .padding()
                 }
             }
+            VStack{
+                Spacer()
+                NavBar(navigationPath: $navigationPath)
+            }
         }
-        .navigationTitle("My Workouts")
+        .navigationTitle("Workouts Page")
         .onAppear {
             fetchAllWorkoutData()
         }
@@ -158,5 +165,5 @@ struct WorkoutsPage: View {
 #Preview {
     @Previewable @State var mockNavigationPath: [AppDestination] = []
 
-    WorkoutsPage()
+    WorkoutsPage(navigationPath: $mockNavigationPath)
 }

@@ -19,7 +19,7 @@ struct MainView: View {
                     case .workoutHistory:
                         WorkoutHistoryPage(navigationPath: $navigationPath)
                     case .workouts:
-                        WorkoutsPage()
+                        WorkoutsPage(navigationPath: $navigationPath)
                     case .exercises:
                         ExercisesPage(navigationPath: $navigationPath)
                     case .measure:
