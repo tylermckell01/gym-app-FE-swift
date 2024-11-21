@@ -46,7 +46,6 @@ struct LoginPage: View {
                 
                 Button("go to homepage") {
                     navigationPath.append(.homePage)
-                    print("navigation path \(navigationPath)")
                 }
                 .disabled(isSubmitting)
                 .padding(.horizontal)
@@ -97,15 +96,18 @@ struct LoginPage: View {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let authInfo = json["auth_info"] as? [String: Any],
-                       let token = authInfo["auth_token"] as? String {
+                       let token = authInfo["auth_token"] as? String,
+                       let user = authInfo["user"] as? [String: Any],
+                       let userId = user["user_id"] as? String
+                    {
                         
                         let keychain = KeychainSwift()
                         keychain.set(token, forKey: "authToken")
+                        keychain.set(userId, forKey: "userId")
 
                         DispatchQueue.main.async {
                             showSuccessAlert = true
-                            navigationPath = [.homePage]
-                            print("navigation path \(navigationPath)")
+                            navigationPath.append(.homePage)
                         }
                     }
                 } catch {

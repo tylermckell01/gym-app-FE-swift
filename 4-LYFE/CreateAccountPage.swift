@@ -70,7 +70,6 @@ struct CreateAccountPage: View {
                 
                 Button("Go to Login") {
                     navigationPath.append(.login)
-                    print("navigation path \(navigationPath)")
                 }
             }
         }
@@ -119,7 +118,6 @@ struct CreateAccountPage: View {
                 await MainActor.run {
                     resetForm()
                     navigationPath.append(.login)
-                    print("navigation path \(navigationPath)")
                 }
             } else {
                 await MainActor.run {
