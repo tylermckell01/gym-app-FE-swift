@@ -11,6 +11,7 @@ struct WorkoutsPage: View {
     @State private var workouts: [Workout] = []
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
+    @State private var templateModalOpen = false
     
     struct ApiResponse: Decodable {
         let result: [Workout]
@@ -59,8 +60,16 @@ struct WorkoutsPage: View {
                 
                 
                 ScrollView {
-//                    Text("Workouts page")
-//                        .font(.largeTitle)
+                    Spacer()
+                    Button(action: {
+                        templateModalOpen = true
+                    }) {
+                        Text("+ Workout Template")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(8)
+                        }
                     
                     LazyVGrid(columns: layout, spacing: 20) {
                         ForEach(workouts, id: \.workout_id) { workout in
@@ -103,6 +112,62 @@ struct WorkoutsPage: View {
     let layout = [
         GridItem(.adaptive(minimum: 150), spacing: 20)
     ]
+    
+    
+    func createWorkoutTemplate() {
+        isLoading = true
+        errorMessage = nil
+        
+        guard let url = URL(string: "http://127.0.0.1:8086/workout") else {
+            errorMessage = "Invalid URL"
+            isLoading = false
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let keychain = KeychainSwift()
+        guard let token = keychain.get("authToken") else {
+            errorMessage = "Missing authentication token"
+            isLoading = false
+            return
+        }
+        request.setValue(token, forHTTPHeaderField: "auth")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                isLoading = false
+            }
+
+            if let error = error {
+                DispatchQueue.main.async {
+                    errorMessage = "Error fetching workouts: \(error.localizedDescription)"
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    errorMessage = "No data received from server"
+                }
+                return
+            }
+            
+            do {
+                let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
+                DispatchQueue.main.async {
+                    self.workouts = apiResponse.result
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    errorMessage = "Failed to decode workout data: \(error.localizedDescription)"
+                }
+            }
+        }
+        .resume()
+    }
     
     func fetchAllWorkoutData() {
         isLoading = true
