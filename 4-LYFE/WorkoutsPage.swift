@@ -107,6 +107,9 @@ struct WorkoutsPage: View {
         .onAppear {
             fetchAllWorkoutData()
         }
+        .sheet(isPresented: $templateModalOpen) {
+                    WorkoutTemplateModalView()
+                }
     }
 
     let layout = [
@@ -195,7 +198,7 @@ struct WorkoutsPage: View {
             DispatchQueue.main.async {
                 isLoading = false
             }
-
+            
             if let error = error {
                 DispatchQueue.main.async {
                     errorMessage = "Error fetching workouts: \(error.localizedDescription)"
@@ -222,6 +225,39 @@ struct WorkoutsPage: View {
             }
         }
         .resume()
+    }
+        struct WorkoutTemplateModalView: View {
+            var body: some View {
+                VStack {
+                    Text("Workout Template")
+                        .font(.largeTitle)
+                        .padding()
+                    
+                    Text("Create your workout template.")
+                        .padding()
+                    
+//                    Button(action:  {
+//                        templateModalOpen = false
+//                    }) {
+//                        Text("Close")
+//                            .foregroundColor(.white)
+//                            .padding()
+//                            .background(Color.red)
+//                            .cornerRadius(8)
+//                    }
+                    
+                    Button("Close") {
+                    }
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.red)
+                        .cornerRadius(8)
+
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.gray.opacity(0.3).ignoresSafeArea())
+            
+        }
     }
 }
 
