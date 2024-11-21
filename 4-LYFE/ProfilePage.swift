@@ -29,9 +29,9 @@ struct ProfilePage: View {
             
             VStack(spacing: 20) {
                 
-                Text("Profile Page")
-                    .font(.largeTitle)
-                    .padding()
+//                Text("Profile Page")
+//                    .font(.largeTitle)
+//                    .padding()
                 
                 Text("Hello 'User'")
                 

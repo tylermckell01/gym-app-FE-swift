@@ -29,9 +29,9 @@ struct ExercisesPage: View {
             
             VStack(spacing: 20) {
                 
-                Text("Exercises Page")
-                    .font(.largeTitle)
-                    .padding()
+//                Text("Exercises Page")
+//                    .font(.largeTitle)
+//                    .padding()
                 
                 Text("Hello 'User'")
                 

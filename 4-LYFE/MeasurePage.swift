@@ -29,9 +29,9 @@ struct MeasurePage: View {
             
             VStack(spacing: 20) {
                 
-                Text("Measurements Page")
-                    .font(.largeTitle)
-                    .padding()
+//                Text("Measurements Page")
+//                    .font(.largeTitle)
+//                    .padding()
                 
                 Text("Hello 'User'")
                 

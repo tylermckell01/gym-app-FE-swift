@@ -29,9 +29,9 @@ struct WorkoutHistoryPage: View {
             
             VStack(spacing: 20) {
                 
-                Text("History Page")
-                    .font(.largeTitle)
-                    .padding()
+//                Text("History Page")
+//                    .font(.largeTitle)
+//                    .padding()
                 
                 Text("Hello 'User'")
                 

@@ -59,8 +59,8 @@ struct WorkoutsPage: View {
                 
                 
                 ScrollView {
-                    Text("Workouts page")
-                        .font(.largeTitle)
+//                    Text("Workouts page")
+//                        .font(.largeTitle)
                     
                     LazyVGrid(columns: layout, spacing: 20) {
                         ForEach(workouts, id: \.workout_id) { workout in

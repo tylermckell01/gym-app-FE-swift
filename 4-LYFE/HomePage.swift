@@ -29,9 +29,9 @@ struct HomePage: View {
             
             VStack(spacing: 20) {
                 
-                Text("Home Page")
-                    .font(.largeTitle)
-                    .padding()
+//                Text("Home Page")
+//                    .font(.largeTitle)
+//                    .padding()
                 
                 Text("Hello 'User'")
                 
