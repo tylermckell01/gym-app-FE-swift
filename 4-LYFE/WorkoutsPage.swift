@@ -117,60 +117,7 @@ struct WorkoutsPage: View {
     ]
     
     
-    func createWorkoutTemplate() {
-        isLoading = true
-        errorMessage = nil
-        
-        guard let url = URL(string: "http://127.0.0.1:8086/workout") else {
-            errorMessage = "Invalid URL"
-            isLoading = false
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let keychain = KeychainSwift()
-        guard let token = keychain.get("authToken") else {
-            errorMessage = "Missing authentication token"
-            isLoading = false
-            return
-        }
-        request.setValue(token, forHTTPHeaderField: "auth")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                isLoading = false
-            }
 
-            if let error = error {
-                DispatchQueue.main.async {
-                    errorMessage = "Error fetching workouts: \(error.localizedDescription)"
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    errorMessage = "No data received from server"
-                }
-                return
-            }
-            
-            do {
-                let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
-                DispatchQueue.main.async {
-                    self.workouts = apiResponse.result
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to decode workout data: \(error.localizedDescription)"
-                }
-            }
-        }
-        .resume()
-    }
     
     func fetchAllWorkoutData() {
         isLoading = true
@@ -227,37 +174,112 @@ struct WorkoutsPage: View {
         .resume()
     }
         struct WorkoutTemplateModalView: View {
+            @Environment(\.dismiss) var dismiss
+            
+            @State private var templateName: String = ""
+            @State private var description: String = ""
+            @State private var length: String = ""
+            
+            @State var isLoading = false
+            @State var errorMessage: String? = nil
+            
             var body: some View {
                 VStack {
-                    Text("Workout Template")
+                    
+                    Text("Create Your Workout")
                         .font(.largeTitle)
                         .padding()
                     
-                    Text("Create your workout template.")
-                        .padding()
-                    
-//                    Button(action:  {
-//                        templateModalOpen = false
-//                    }) {
-//                        Text("Close")
-//                            .foregroundColor(.white)
-//                            .padding()
-//                            .background(Color.red)
-//                            .cornerRadius(8)
-//                    }
-                    
-                    Button("Close") {
-                    }
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.red)
-                        .cornerRadius(8)
+                    TextField("Template Name", text: $templateName)
+                        .padding(.horizontal)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
 
+                    TextField("Description", text: $description)
+                        .padding(.horizontal)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                    TextField("Length", text: $length)
+                        .padding(.horizontal)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    HStack{
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.red)
+                            .cornerRadius(8)
+                        
+                        Button("Submit") {
+                            createWorkoutTemplate()
+                        }
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(8)
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.gray.opacity(0.3).ignoresSafeArea())
-            
         }
+            func createWorkoutTemplate() {
+                print("clicked submit button")
+
+//                isLoading = true
+//                errorMessage = nil
+//                
+//                guard let url = URL(string: "http://127.0.0.1:8086/workout") else {
+//                    errorMessage = "Invalid URL"
+//                    isLoading = false
+//                    return
+//                }
+//                
+//                var request = URLRequest(url: url)
+//                request.httpMethod = "POST"
+//                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//                
+//                let keychain = KeychainSwift()
+//                guard let token = keychain.get("authToken") else {
+//                    errorMessage = "Missing authentication token"
+//                    isLoading = false
+//                    return
+//                }
+//                request.setValue(token, forHTTPHeaderField: "auth")
+//                
+//                URLSession.shared.dataTask(with: request) { data, response, error in
+//                    DispatchQueue.main.async {
+//                        isLoading = false
+//                    }
+//
+//                    if let error = error {
+//                        DispatchQueue.main.async {
+//                            errorMessage = "Error fetching workouts: \(error.localizedDescription)"
+//                        }
+//                        return
+//                    }
+//                    
+//                    guard let data = data else {
+//                        DispatchQueue.main.async {
+//                            errorMessage = "No data received from server"
+//                        }
+//                        return
+//                    }
+//                    
+//                    do {
+//                        let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
+//                        DispatchQueue.main.async {
+//                            self.workouts = apiResponse.result
+//                        }
+//                    } catch {
+//                        DispatchQueue.main.async {
+//                            errorMessage = "Failed to decode workout data: \(error.localizedDescription)"
+//                        }
+//                    }
+//                }
+//                .resume()
+            }
+            
     }
 }
 
