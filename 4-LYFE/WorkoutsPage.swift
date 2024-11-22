@@ -9,6 +9,7 @@ struct WorkoutsPage: View {
     let backgroundColor = Color(red: 51/255, green: 69/255, blue: 127/255)
     
     @State private var workouts: [Workout] = []
+    @State private var exercises: [Exercise] = []
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
     @State private var templateModalOpen = false
@@ -20,7 +21,7 @@ struct WorkoutsPage: View {
     struct ApiResponse: Decodable {
         let result: [Workout]
     }
-
+    
     struct Workout: Decodable {
         let workout_id: UUID
         let workout_name: String
@@ -29,13 +30,13 @@ struct WorkoutsPage: View {
         let exercises: [Exercise]
         let user: User
     }
-
+    
     struct Exercise: Decodable {
         let exercise_id: UUID
         let exercise_name: String
         let muscles_worked: String?
     }
-
+    
     struct User: Decodable {
         let user_id: UUID
         let first_name: String
@@ -44,8 +45,8 @@ struct WorkoutsPage: View {
         let email: String
         let active: Bool
     }
-
-
+    
+    
     var body: some View {
         ZStack {
             backgroundColor
@@ -73,7 +74,7 @@ struct WorkoutsPage: View {
                             .padding()
                             .background(Color.blue)
                             .cornerRadius(8)
-                        }
+                    }
                     
                     LazyVGrid(columns: layout, spacing: 20) {
                         ForEach(workouts, id: \.workout_id) { workout in
@@ -90,6 +91,12 @@ struct WorkoutsPage: View {
                                 Text("\(workout.length, specifier: "%.0f") mins")
                                     .font(.subheadline)
                                     .foregroundColor(.white)
+                                
+                                //                                ForEach(exercises, id: \.exercise_id) { exercise in
+                                //
+                                //                                    Text("\(exercise.exercise_name)")
+                                //
+                                //                                }
                             }
                             .padding()
                             .background(
@@ -97,7 +104,6 @@ struct WorkoutsPage: View {
                                     .fill(Color.white.opacity(0.1))
                             )
                         }
-                        
                     }
                     .padding()
                 }
@@ -109,22 +115,27 @@ struct WorkoutsPage: View {
         }
         .navigationTitle("Workouts Page")
         .onAppear {
-            fetchAllWorkoutData()
+            fetchMyTemplates()
         }
         .sheet(isPresented: $templateModalOpen) {
-                    WorkoutTemplateModalView()
-                }
+            WorkoutTemplateModalView(onTemplateCreated: {
+                fetchMyTemplates()
+            })
+        }
     }
-
     
-    
-    func fetchAllWorkoutData() {
+    func fetchMyTemplates() {
         isLoading = true
         errorMessage = nil
         
+        let keychain = KeychainSwift()
+        guard let userId = keychain.get("userId"), let token = keychain.get("authToken") else {
+            errorMessage = "Missing authentication token or user ID"
+            isLoading = false
+            return
+        }
         
-        
-        guard let url = URL(string: "http://127.0.0.1:8086/workouts") else {
+        guard let url = URL(string: "http://127.0.0.1:8086/workouts/\(userId)") else {
             errorMessage = "Invalid URL"
             isLoading = false
             return
@@ -134,12 +145,7 @@ struct WorkoutsPage: View {
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let keychain = KeychainSwift()
-        guard let token = keychain.get("authToken") else {
-            errorMessage = "Missing authentication token"
-            isLoading = false
-            return
-        }
+        
         request.setValue(token, forHTTPHeaderField: "auth")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -160,11 +166,18 @@ struct WorkoutsPage: View {
                 }
                 return
             }
-            
             do {
                 let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
                 DispatchQueue.main.async {
+                    
                     self.workouts = apiResponse.result
+                    
+                    for workout in self.workouts {
+                        print("Workout Name: \(workout.workout_name)")
+                        for exercise in workout.exercises {
+                            print("- Exercise: \(exercise.exercise_name)")
+                        }
+                    }
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -174,6 +187,7 @@ struct WorkoutsPage: View {
         }
         .resume()
     }
+    
         struct WorkoutTemplateModalView: View {
             @Environment(\.dismiss) var dismiss
             
@@ -183,6 +197,8 @@ struct WorkoutsPage: View {
             
             @State var isLoading = false
             @State var errorMessage: String? = nil
+            
+            var onTemplateCreated: (() -> Void)?
             
             var body: some View {
                 VStack {
@@ -214,6 +230,7 @@ struct WorkoutsPage: View {
                         
                         Button("Submit") {
                             createWorkoutTemplate()
+                            
                         }
                             .foregroundColor(.white)
                             .padding()
@@ -225,7 +242,6 @@ struct WorkoutsPage: View {
                 .background(Color.gray.opacity(0.3).ignoresSafeArea())
         }
             func createWorkoutTemplate() {
-//                print("clicked submit button")
                 isLoading = true
                 errorMessage = nil
                 
@@ -265,11 +281,18 @@ struct WorkoutsPage: View {
                 URLSession.shared.dataTask(with: request) { data, response, error in
                     DispatchQueue.main.async {
                         isLoading = false
-                    }
-                    DispatchQueue.main.async {
+                        if error == nil {
+                        onTemplateCreated?()
                         dismiss()
+                        } else {
+                            errorMessage = "Failed to create workout template."
+                        }
                     }
+//                    DispatchQueue.main.async {
+//                        dismiss()
+//                    }
                 }
+                
                 .resume()
             }
     }
