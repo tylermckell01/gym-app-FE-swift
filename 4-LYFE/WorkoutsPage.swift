@@ -13,6 +13,8 @@ struct WorkoutsPage: View {
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
     @State private var templateModalOpen = false
+    @State private var openWorkout = false
+
     
     let layout = [
         GridItem(.adaptive(minimum: 150), spacing: 20)
@@ -84,16 +86,14 @@ struct WorkoutsPage: View {
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.leading)
                                 
-
-                                
-//                                Text(workout.description ?? "No description")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.white)
-//                                    .lineLimit(2)
-//                                
-//                                Text("\(workout.length, specifier: "%.0f") mins")
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.white)
+                                //                                Text(workout.description ?? "No description")
+                                //                                    .font(.subheadline)
+                                //                                    .foregroundColor(.white)
+                                //                                    .lineLimit(2)
+                                //
+                                //                                Text("\(workout.length, specifier: "%.0f") mins")
+                                //                                    .font(.subheadline)
+                                //                                    .foregroundColor(.white)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
                                     ForEach(workout.exercises, id: \.exercise_id) { exercise in
@@ -101,7 +101,7 @@ struct WorkoutsPage: View {
                                             .font(.caption)
                                             .foregroundColor(.white)
                                             .multilineTextAlignment(.leading)
-
+                                        
                                     }
                                 }
                                 .padding(.top, 4)
@@ -113,6 +113,12 @@ struct WorkoutsPage: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.white.opacity(0.1))
                             )
+                            
+                            .onTapGesture{
+                                openWorkout = true
+                                print(workout.workout_name, "tapped")
+                            }
+                            
                         }
                     }
 
