@@ -82,29 +82,40 @@ struct WorkoutsPage: View {
                                 Text(workout.workout_name)
                                     .font(.headline)
                                     .foregroundColor(.white)
+                                    .multilineTextAlignment(.leading)
                                 
-                                Text(workout.description ?? "No description")
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
-                                    .lineLimit(2)
+
                                 
-                                Text("\(workout.length, specifier: "%.0f") mins")
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
+//                                Text(workout.description ?? "No description")
+//                                    .font(.subheadline)
+//                                    .foregroundColor(.white)
+//                                    .lineLimit(2)
+//                                
+//                                Text("\(workout.length, specifier: "%.0f") mins")
+//                                    .font(.subheadline)
+//                                    .foregroundColor(.white)
                                 
-                                //                                ForEach(exercises, id: \.exercise_id) { exercise in
-                                //
-                                //                                    Text("\(exercise.exercise_name)")
-                                //
-                                //                                }
+                                VStack(alignment: .leading, spacing: 4) {
+                                    ForEach(workout.exercises, id: \.exercise_id) { exercise in
+                                        Text("- \(exercise.exercise_name)")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                            .multilineTextAlignment(.leading)
+
+                                    }
+                                }
+                                .padding(.top, 4)
                             }
+                            .frame(height: 100, alignment: .top)
                             .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.white.opacity(0.1))
                             )
                         }
                     }
+
                     .padding()
                 }
             }
