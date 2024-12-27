@@ -104,7 +104,14 @@ struct LoginPage: View {
                         let keychain = KeychainSwift()
                         keychain.set(token, forKey: "authToken")
                         keychain.set(userId, forKey: "userId")
+                        if let firstName = user["first_name"] as? String {
+                            keychain.set(firstName, forKey: "firstName")
+                            print(user["first_name"]!)
+                            print(firstName)
+                        }
 
+
+                        
                         DispatchQueue.main.async {
                             showSuccessAlert = true
                             navigationPath.append(.homePage)

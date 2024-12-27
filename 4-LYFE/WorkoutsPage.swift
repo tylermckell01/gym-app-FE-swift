@@ -189,12 +189,12 @@ struct WorkoutsPage: View {
                     
                     self.workouts = apiResponse.result
                     
-                    for workout in self.workouts {
-                        print("Workout Name: \(workout.workout_name)")
-                        for exercise in workout.exercises {
-                            print("- Exercise: \(exercise.exercise_name)")
-                        }
-                    }
+//                    for workout in self.workouts {
+//                        print("Workout Name: \(workout.workout_name)")
+//                        for exercise in workout.exercises {
+//                            print("- Exercise: \(exercise.exercise_name)")
+//                        }
+//                    }
                 }
             } catch {
                 DispatchQueue.main.async {
